@@ -26,12 +26,33 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     #complete this method
+    new_user = User.create(user_params)
+    if new_user.errors.any?
+      flash.now[:error]= "Some invalid data in the fields, please try it again"
+      render action: new
+
+    else
+      flash[:success] = "User "+new_user.name+" "+new_user.last_name+" was created successfully!"
+      redirect_to user_path(id=new_user.id)
+
+    end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    #complete this method
+    user=set_user
+
+    user.update(user_params)
+    if user.errors.any?
+      flash.now[:error]= "Some invalid data in the fields, please try it again"
+      render :edit
+
+    else
+      flash[:success] = "User edited successfully!"
+      redirect_to user_path(user.id)
+
+    end
   end
 
   # DELETE /users/1
